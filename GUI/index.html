@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Parse Tree Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      padding: 20px;
+    }
+    textarea, pre {
+      width: 100%;
+      font-family: monospace;
+      margin-top: 10px;
+    }
+    textarea {
+      height: 150px;
+    }
+    pre {
+      background: #222;
+      color: #eee;
+      padding: 10px;
+      white-space: pre-wrap;
+    }
+    #file-content {
+      white-space: pre-wrap;
+      background-color: #f4f4f4;
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin-top: 10px;
+      max-height: 300px;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Parse Tree Editor</h1>
+
+<h3>1. Server File I/O</h3>
+<textarea id="textInput" placeholder="Enter your tree content here..."></textarea><br>
+<button onclick="saveText()">💾 Save to Server</button>
+<button onclick="loadFile()">📄 Load output.txt</button>
+
+  <button onclick="loadTree()">Show Parse Tree</button>
+<div id="treeContainer"></div>
+<p id="message"></p>
+<h4>Contents of output.txt:</h4>
+<pre id="fileContent">(Nothing loaded yet)</pre>
+
+<hr>
+
+<h3>2. Load Local File (Not saved to server)</h3>
+<input type="file" id="file-input" />
+<div id="file-content">(No file selected)</div>
+
+<script>
+  // Save text to server (POST /saveText)
+  function saveText() {
+    const text = document.getElementById('textInput').value;
+
+    fetch('/saveText', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    })
+    .then(res => res.text())
+    .then(msg => {
+      document.getElementById('message').textContent = msg;
+    })
+    .catch(err => {
+      document.getElementById('message').textContent = 'Error: ' + err.message;
+    });
+  }
+
+  // Load file content from server (GET /readFile)
+  function loadFile() {
+    fetch('/readFile')
+      .then(res => {
+        if (!res.ok) throw new Error("Could not read file");
+        return res.text();
+      })
+      .then(data => {
+        document.getElementById('fileContent').textContent = data || '(File is empty)';
+      })
+      .catch(err => {
+        document.getElementById('fileContent').textContent = 'Error: ' + err.message;
+      });
+  }
+
+  // Load local file (client-side only)
+  document.getElementById('file-input').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('file-content').textContent = e.target.result;
+      };
+      reader.onerror = function() {
+        alert('Error reading the file!');
+      };
+      reader.readAsText(file);
+    }
+  });
+
+  function loadTree() {
+    fetch('/tree')
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to load parse tree');
+        return res.text();
+      })
+      .then(html => {
+        // Insert the received HTML inside the container
+        document.getElementById('treeContainer').innerHTML = html;
+      })
+      .catch(err => {
+        document.getElementById('treeContainer').textContent = 'Error: ' + err.message;
+      });
+  }
+</script>
+
+</body>
+</html>

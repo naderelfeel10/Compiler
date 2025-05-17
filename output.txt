@@ -1,0 +1,126 @@
+1) TOKEN_ID (   x     )  
+2) TOKEN_EQUALS (   =     )  
+3) TOKEN_INT (   10     )  
+4) TOKEN_KEYWORD (   if     )  
+5) TOKEN_ID (   x     )  
+6) TOKEN_REL_EQUALS (   =     )  
+7) TOKEN_INT (   10     )  
+8) TOKEN_COLON (   :     )  
+9) TOKEN_ID (   y     )  
+10) TOKEN_EQUALS (   =     )  
+11) TOKEN_INT (   7     )  
+12) TOKEN_KEYWORD (   else     )  
+13) TOKEN_COLON (   :     )  
+14) TOKEN_ID (   y     )  
+15) TOKEN_EQUALS (   =     )  
+16) TOKEN_INT (   11     )  
+
+Symbol Table:
+--------------------------------------------------------
+|         Name |       Kind |      Scope |   Line |
+--------------------------------------------------------
+|            x |   variable |     global |      1 |
+|            y |   variable |     global |      3 |
+--------------------------------------------------------
+Starting parsing...
+01Entering assignment_stmt()
+Matched ID
+Matched '='
+Entering expr()
+Entering term()
+Entering factor()
+Matched INT
+Exiting factor()
+Exiting term()
+Exiting expr()
+Exiting assignment_stmt()
+Exiting statement
+34Entering comparison()
+Entering expr()
+Entering term()
+Entering factor()
+Matched ID
+Exiting factor()
+Exiting term()
+Exiting expr()
+Entering expr()
+Entering term()
+Entering factor()
+Matched INT
+Exiting factor()
+Exiting term()
+Exiting expr()
+Exiting comparison()
+
+ #$ if parsed
+89Entering assignment_stmt()
+Matched ID
+Matched '='
+Entering expr()
+Entering term()
+Entering factor()
+Matched INT
+Exiting factor()
+Exiting term()
+Exiting expr()
+Exiting assignment_stmt()
+Exiting statement
+leo23333else
+
+ #$ elif or else parsed
+1314Entering assignment_stmt()
+Matched ID
+Matched '='
+Entering expr()
+Entering term()
+Entering factor()
+Matched INT
+Exiting factor()
+Exiting term()
+Exiting expr()
+Exiting assignment_stmt()
+Exiting statement
+Exiting statement
+└── statement_list
+    ├── statement
+    │   └── assingment_stmt
+    │       ├── ID (x)
+    │       ├── "="
+    │       └── expr_stmt
+    │           └── term_stmt
+    │               └── factor_stmt
+    │                   └── INT (10)
+    └── statement
+        └── if_stmt
+            ├── "if"
+            ├── compare_stmt
+            │   ├── expr_stmt
+            │   │   └── term_stmt
+            │   │       └── factor_stmt
+            │   │           └── ID (x)
+            │   └── expr_stmt
+            │       └── term_stmt
+            │           └── factor_stmt
+            │               └── INT (10)
+            ├── ":"
+            ├── statement
+            │   └── assingment_stmt
+            │       ├── ID (y)
+            │       ├── "="
+            │       └── expr_stmt
+            │           └── term_stmt
+            │               └── factor_stmt
+            │                   └── INT (7)
+            ├── keyword (else)
+            ├── ":"
+            └── statement
+                └── assingment_stmt
+                    ├── ID (y)
+                    ├── "="
+                    └── expr_stmt
+                        └── term_stmt
+                            └── factor_stmt
+                                └── INT (11)
+Parsing complete!
+No Parsing Errors
+End of the Program
